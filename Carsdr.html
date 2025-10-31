@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N4Speed | Racing & Drifting Cars</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Login Styles - ADD ONLY THIS */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .login-container h2 {
+            margin-bottom: 30px;
+            color: #1a1a1a;
+        }
+
+        .login-form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .login-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .login-form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .login-form-group input:focus {
+            border-color: #d40000;
+            outline: none;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #d40000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background: #b30000;
+        }
+
+        .login-error {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .login-success {
+            color: #28a745;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* Contact Form Success Message */
+        .contact-success {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        /* YOUR ORIGINAL CAR WEBSITE STYLES - NO CHANGES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #1a1a1a;
+            --secondary: #d40000;
+            --accent: #2c5530;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Header Styles */
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        nav {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        
+        nav a:hover, nav a.active {
+            color: var(--secondary);
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .cta-button {
+            background: var(--secondary);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .cta-button:hover {
+            background: #b30000;
+            transform: translateY(-2px);
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .section-title p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Car Grid */
+        .car-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .car-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .car-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .car-image {
+            width: 100%;
+            height: 220px;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .car-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--secondary);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        
+        .car-details {
+            padding: 1.5rem;
+        }
+        
+        .car-brand {
+            font-size: 0.9rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .car-model {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .car-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .car-features {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .feature {
+            text-align: center;
+        }
+        
+        .feature-value {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .feature-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 0.2rem;
+        }
+        
+        .car-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #b30000;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Page Sections */
+        .page-section {
+            display: none;
+        }
+        
+        .page-section.active {
+            display: block;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://wallpaperaccess.com/full/2096170.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: white;
+            padding: 8rem 2rem;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .hero-content h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-content p {
+            font-size: 1.5rem;
+            max-width: 600px;
+        }
+        
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .about-text h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .about-text p {
+            margin-bottom: 1.5rem;
+            color: var(--gray);
+        }
+        
+        .about-image {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* Contact Section */
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+        
+        .contact-info {
+            background: var(--primary);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+        
+        .contact-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+        }
+        
+        .contact-details {
+            list-style: none;
+        }
+        
+        .contact-details li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .contact-details i {
+            color: var(--secondary);
+            width: 20px;
+        }
+        
+        .contact-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+        
+        /* Services Section */
+        .services {
+            background: var(--primary);
+            color: white;
+            padding: 5rem 0;
+            margin-top: 5rem;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .service-card {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+        }
+        
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+        
+        .footer-col h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--secondary);
+        }
+        
+        .footer-col ul {
+            list-style: none;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-col a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-col a:hover {
+            color: var(--secondary);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: var(--secondary);
+            color: var(--primary);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 3rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-toggle {
+                display: block;
+            }
+            
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--primary);
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
+            
+            nav ul.active {
+                display: flex;
+            }
+            
+            .car-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .car-actions {
+                flex-direction: column;
+            }
+            
+            .about-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-content h2 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Overlay - ONLY ADDITION -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-container">
+            <h2>Welcome</h2>
+            <form id="loginForm">
+                <div class="login-form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required>
+                    <div class="login-error" id="username-error"></div>
+                </div>
+                <div class="login-form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                    <div class="login-error" id="password-error"></div>
+                </div>
+                <button type="submit" class="login-btn">Login</button>
+                <div class="login-success" id="login-success"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- YOUR ORIGINAL CAR WEBSITE HTML - NO CHANGES -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-car"></i>
+                <h1>N4<span>SPEED</span></h1>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav>
+                <ul id="navMenu">
+                    <li><a href="#" class="nav-link active" data-page="home">Home</a></li>
+                    <li><a href="#" class="nav-link" data-page="cars">Cars</a></li>
+                    <li><a href="#" class="nav-link" data-page="about">About</a></li>
+                    <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
+                </ul>
+            </nav>
+            <a href="#" class="cta-button" id="scheduleTestDrive">Schedule Test Drive</a>
+        </div>
+    </header>
+
+    <section id="home" class="page-section active">
+        <div class="hero">
+            <div class="hero-content">
+                <h2>N4SPEED</h2>
+                <p>Your premier destination for high-performance racing and drifting cars</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="cars" class="page-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Racing & Drifting Collection</h2>
+                <p>Browse our extensive inventory of track-ready and drift-spec vehicles.</p>
+            </div>
+            
+            <div class="car-grid">
+                <div class="car-card">
+                    <div class="car-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaSzasdAlMjpj5EoYSvhvTJY7-ec7A49BZNgtcK91xil9qkF2p&s')">
+                        <div class="car-badge">Track Ready</div>
+                    </div>
+                    <div class="car-details">
+                        <div class="car-brand">BMW</div>
+                        <div class="car-model">M4 Competition</div>
+                        <div class="car-price">₹1.4 Crore</div>
+                        <p>High-performance coupe with aggressive styling and track-ready capabilities.</p>
+                        <div class="car-features">
+                            <div class="feature">
+                                <div class="feature-value">3.0L I6</div>
+                                <div class="feature-label">Engine</div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-value">503 HP</div>
+                                <div class="feature-label">Power</div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-value">3.8s</div>
+                                <div class="feature-label">0-100 km/h</div>
+                            </div>
+                        </div>
+                        <div class="car-actions">
+                            <a href="#" class="btn btn-primary buy-now-btn">Buy Now</a>
+                            <a href="#" class="btn btn-secondary test-drive-btn">Test Drive</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="car-card">
+                    <div class="car-image" style="background-image: url('https://4kwallpapers.com/images/walls/thumbs_3t/23672.jpeg')">
+                        <div class="car-badge">Track Spec</div>
+                    </div>
+                    <div class="car-details">
+                        <div class="car-brand">Porsche</div>
+                        <div class="car-model">911 Turbo S</div>
+                        <div class="car-price">₹2.3 Crore</div>
+                        <p>The iconic sports car with exceptional performance and track capabilities.</p>
+                        <div class="car-features">
+                            <div class="feature">
+                                <div class="feature-value">3.8L H6</div>
+                                <div class="feature-label">Engine</div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-value">640 HP</div>
+                                <div class="feature-label">Power</div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-value">2.6s</div>
+                                <div class="feature-label">0-100 km/h</div>
+                            </div>
+                        </div>
+                        <div class="car-actions">
+                            <a href="#" class="btn btn-primary buy-now-btn">Buy Now</a>
+                            <a href="#" class="btn btn-secondary test-drive-btn">Test Drive</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="car-card">
+                    <div class="car-image" style="background-image: url('https://wallpaperaccess.com/full/2096170.jpg')">
+                        <div class="car-badge">Drift Spec</div>
+                    </div>
+                    <div class="car-details">
+                        <div class="car-brand">Ford</div>
+                        <div class="car-model">Mustang GT</div>
+                        <div class="car-price">₹1.2 Crore</div>
+                        <p>American muscle with drift-ready modifications for sideways action.</p>
+                        <div class="car-features">
+                            <div class="feature">
+                                <div class="feature-value">5.0L V8</div>
+                                <div class="feature-label">Engine</div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-value">450 HP</div>
+                                <div class="feature-label">Power</div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-value">4.3s</div>
+                                <div class="feature-label">0-100 km/h</div>
+                            </div>
+                        </div>
+                        <div class="car-actions">
+                            <a href="#" class="btn btn-primary buy-now-btn">Buy Now</a>
+                            <a href="#" class="btn btn-secondary test-drive-btn">Test Drive</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Car 4 - Dodge Charger -->
+                <div class="car-card">
+                    <div class="car-image" style="background-image: url('https://4kwallpapers.com/images/walls/thumbs_3t/13363.jpg')">
+                        <div class="car-badge">Drift Ready</div>
+                    </div>
+                    <div class="car-details">
+                        <div class="car-brand">Dodge</div>
+                        <div class="car-model">Charger SRT</div>
+                        <div class="car-price">₹1.8 Crore</div>
+                        <p>Muscle sedan with drift modifications for controlled slides.</p>
+                        <div class="car-features">
+                            <div class="feature">
+                                <div class="feature-value">6.4L V8</div>
+                                <div class="feature-label">Engine</div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-value">485 HP</div>
+                                <div class="feature-label">Power</div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-value">4.3s</div>
+                                <div class="feature-label">0-100 km/h</div>
+                            </div>
+                        </div>
+                        <div class="car-actions">
+                            <a href="#" class="btn btn-primary buy-now-btn">Buy Now</a>
+                            <a href="#" class="btn btn-secondary test-drive-btn">Test Drive</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Car 5 - Mercedes-Benz AMG GT -->
+                <div class="car-card">
+                    <div class="car-image" style="background-image: url('https://purepng.com/public/uploads/large/51506279779c6rntanvyoznezpyppnhohayyxtzb1fw4pyobj8vrqyxl5jgyo0x8wqtg9rcqmi0ddeo5f0xplr20eua2fmf3maooz8epuincm94.png')">
+                        <div class="car-badge">Track Spec</div>
+                    </div>
+                    <div class="car-details">
+                        <div class="car-brand">Mercedes-Benz</div>
+                        <div class="car-model">AMG GT R</div>
+                        <div class="car-price">₹2.7 Crore</div>
+                        <p>Track-focused beast with aggressive aerodynamics and race-derived tech.</p>
+                        <div class="car-features">
+                            <div class="feature">
+                                <div class="feature-value">4.0L V8</div>
+                                <div class="feature-label">Engine</div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-value">577 HP</div>
+                                <div class="feature-label">Power</div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-value">3.6s</div>
+                                <div class="feature-label">0-100 km/h</div>
+                            </div>
+                        </div>
+                        <div class="car-actions">
+                            <a href="#" class="btn btn-primary buy-now-btn">Buy Now</a>
+                            <a href="#" class="btn btn-secondary test-drive-btn">Test Drive</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Car 6 - Nissan GT-R -->
+                <div class="car-card">
+                    <div class="car-image" style="background-image: url('https://tse3.mm.bing.net/th/id/OIP.PdhR-irSPPUUIlCwqCnmAAHaEK?pid=Api&P=0&h=180')">
+                        <div class="car-badge">Track Monster</div>
+                    </div>
+                    <div class="car-details">
+                        <div class="car-brand">Nissan</div>
+                        <div class="car-model">GT-R Nismo</div>
+                        <div class="car-price">₹2.5 Crore</div>
+                        <p>The legendary Godzilla with track-focused upgrades and race-spec components.</p>
+                        <div class="car-features">
+                            <div class="feature">
+                                <div class="feature-value">3.8L V6</div>
+                                <div class="feature-label">Engine</div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-value">600 HP</div>
+                                <div class="feature-label">Power</div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-value">2.7s</div>
+                                <div class="feature-label">0-100 km/h</div>
+                            </div>
+                        </div>
+                        <div class="car-actions">
+                            <a href="#" class="btn btn-primary buy-now-btn">Buy Now</a>
+                            <a href="#" class="btn btn-secondary test-drive-btn">Test Drive</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Car 7 - Toyota Supra -->
+                <div class="car-card">
+                    <div class="car-image" style="background-image: url('https://autonxt.net/wp-content/uploads/2020/09/2021_Toyota_GR_Supra_Premium_Absolute_Zero_11.jpg')">
+                        <div class="car-badge">Drift King</div>
+                    </div>
+                    <div class="car-details">
+                        <div class="car-brand">Toyota</div>
+                        <div class="car-model">GR Supra</div>
+                        <div class="car-price">₹1.1 Crore</div>
+                        <p>The iconic sports car reborn with drift-ready modifications and enhanced performance.</p>
+                        <div class="car-features">
+                            <div class="feature">
+                                <div class="feature-value">3.0L I6</div>
+                                <div class="feature-label">Engine</div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-value">382 HP</div>
+                                <div class="feature-label">Power</div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-value">3.9s</div>
+                                <div class="feature-label">0-100 km/h</div>
+                            </div>
+                        </div>
+                        <div class="car-actions">
+                            <a href="#" class="btn btn-primary buy-now-btn">Buy Now</a>
+                            <a href="#" class="btn btn-secondary test-drive-btn">Test Drive</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Car 8 - Mazda RX-7 -->
+                <div class="car-card">
+                    <div class="car-image" style="background-image: url('https://supercarblondie.com/wp-content/uploads/lamborghini-revuelto-unveiling-1-1024x640.jpg')">
+                        <div class="car-badge">Rotary Legend</div>
+                    </div>
+                    <div class="car-details">
+                        <div class="car-brand">lamborghini</div>
+                        <div class="car-model">revuelto</div>
+                        <div class="car-price">₹95 Lakh</div>
+                        <p>Iconic rotary-powered drift machine with extensive modifications for competition.</p>
+                        <div class="car-features">
+                            <div class="feature">
+                                <div class="feature-value">1.3L Rotary</div>
+                                <div class="feature-label">Engine</div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-value">350 HP</div>
+                                <div class="feature-label">Power</div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-value">4.9s</div>
+                                <div class="feature-label">0-100 km/h</div>
+                            </div>
+                        </div>
+                        <div class="car-actions">
+                            <a href="#" class="btn btn-primary buy-now-btn">Buy Now</a>
+                            <a href="#" class="btn btn-secondary test-drive-btn">Test Drive</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Car 9 - Subaru WRX STI -->
+                <div class="car-card">
+                    <div class="car-image" style="background-image: url('https://www.wintonsworld.com/wp-content/uploads/2014/01/Subaru-WRX-STI.jpg')">
+                        <div class="car-badge">Rally Spec</div>
+                    </div>
+                    <div class="car-details">
+                        <div class="car-brand">Subaru</div>
+                        <div class="car-model">WRX STI</div>
+                        <div class="car-price">₹85 Lakh</div>
+                        <p>Rally-bred all-wheel-drive monster with drift modifications and enhanced power.</p>
+                        <div class="car-features">
+                            <div class="feature">
+                                <div class="feature-value">2.5L Flat-4</div>
+                                <div class="feature-label">Engine</div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-value">310 HP</div>
+                                <div class="feature-label">Power</div>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-value">5.2s</div>
+                                <div class="feature-label">0-100 km/h</div>
+                            </div>
+                        </div>
+                        <div class="car-actions">
+                            <a href="#" class="btn btn-primary buy-now-btn">Buy Now</a>
+                            <a href="#" class="btn btn-secondary test-drive-btn">Test Drive</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="page-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>About N4Speed</h2>
+                <p>Your trusted partner in high-performance racing and drifting cars.</p>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Excellence in Racing & Drifting Cars</h2>
+                    <p>Founded with a passion for motorsports, N4Speed has established itself as the premier destination for racing and drifting enthusiasts in India.</p>
+                    <p>We understand that purchasing a racing or drift car is more than a transaction—it's joining a community. Our team of motorsports experts is dedicated to ensuring that experience is seamless, enjoyable, and tailored to your unique driving preferences.</p>
+                    <a href="#" class="btn btn-primary" id="aboutContactBtn">Get In Touch</a>
+                </div>
+                <div class="about-image">
+                    <div style="background: #eee; height: 300px; display: flex; align-items: center; justify-content: center; color: #999;">
+                        <i class="fas fa-car" style="font-size: 3rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="page-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contact Us</h2>
+                <p>Get in touch with our racing and drifting specialists.</p>
+            </div>
+            
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Contact Information</h3>
+                    <ul class="contact-details">
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Trichy, Tamil Nadu</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone"></i>
+                            <span>+91 7305735186</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <span>dicson01102005@gmail.com</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-clock"></i>
+                            <span>Mon-Sat: 9AM - 7PM</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/dicson7" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.instagram.com/dicson__05" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.facebook.com/share/17fioKay4C/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h3>Schedule a Test Drive</h3>
+                    <div class="contact-success" id="contactSuccess">
+                        <i class="fas fa-check-circle"></i> Sent Successfully! We will contact you soon.
+                    </div>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="interest">Vehicle Interest</label>
+                            <input type="text" id="interest" name="interest">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Preferred Date & Time</label>
+                            <textarea id="message" name="message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Schedule Test Drive</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services">
+        <div class="section-title" style="color: white;">
+            <h2>Our Performance Services</h2>
+            <p>We offer comprehensive services to ensure your racing or drifting experience is exceptional.</p>
+        </div>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Track Insurance</h3>
+                <p>Comprehensive protection plans for your racing vehicle with track day coverage.</p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <h3>Performance Tuning</h3>
+                <p>Expert technicians specializing in race-spec modifications and engine tuning.</p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-car-side"></i>
+                </div>
+                <h3>Track Test Drives</h3>
+                <p>Experience your dream race car firsthand with our private track sessions.</p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-hand-holding-usd"></i>
+                </div>
+                <h3>Racing Financing</h3>
+                <p>Tailored financial solutions with competitive rates for performance car purchases.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>N4Speed</h3>
+                <p>Your premier destination for racing and drifting automobiles from the world's most prestigious performance manufacturers.</p>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/dicson7" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://www.instagram.com/dicson__05" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/share/17fioKay4C/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#" class="nav-link" data-page="home">Home</a></li>
+                    <li><a href="#" class="nav-link" data-page="cars">Cars</a></li>
+                    <li><a href="#" class="nav-link" data-page="about">About</a></li>
+                    <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> Trichy, Tamil Nadu</li>
+                    <li><i class="fas fa-phone"></i> +91 7305735186</li>
+                    <li><i class="fas fa-envelope"></i> dicson01102005@gmail.com</li>
+                    <li><i class="fas fa-clock"></i> Mon-Sat: 9AM - 7PM</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2023 N4Speed. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Login functionality - ONLY ADDITION
+        const FIXED_USERNAME = "URK23CS9007";
+        const FIXED_PASSWORD = "01102005";
+
+        // Show login if not already logged in this session
+        if (sessionStorage.getItem('n4speedLoggedIn') !== 'true') {
+            document.getElementById('loginOverlay').style.display = 'flex';
+        }
+
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Clear previous errors
+            document.getElementById('username-error').style.display = 'none';
+            document.getElementById('password-error').style.display = 'none';
+            document.getElementById('login-success').style.display = 'none';
+            
+            // Check credentials
+            if (username === FIXED_USERNAME && password === FIXED_PASSWORD) {
+                // Show success message
+                document.getElementById('login-success').textContent = 'Login successful!';
+                document.getElementById('login-success').style.display = 'block';
+                
+                // Store session
+                sessionStorage.setItem('n4speedLoggedIn', 'true');
+                
+                // Hide login after short delay
+                setTimeout(function() {
+                    document.getElementById('loginOverlay').style.display = 'none';
+                }, 1000);
+            } else {
+                // Show error message
+                document.getElementById('password-error').textContent = 'Invalid username or password';
+                document.getElementById('password-error').style.display = 'block';
+            }
+        });
+
+        // Clear session when page is closed/refreshed
+        window.addEventListener('beforeunload', function() {
+            sessionStorage.removeItem('n4speedLoggedIn');
+        });
+
+        // YOUR ORIGINAL CAR WEBSITE JAVASCRIPT - NO CHANGES
+        document.addEventListener('DOMContentLoaded', function() {
+            const navToggle = document.getElementById('navToggle');
+            const navMenu = document.getElementById('navMenu');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pageSections = document.querySelectorAll('.page-section');
+            const scheduleTestDriveBtn = document.getElementById('scheduleTestDrive');
+            const aboutContactBtn = document.getElementById('aboutContactBtn');
+            const buyNowButtons = document.querySelectorAll('.buy-now-btn');
+            const testDriveButtons = document.querySelectorAll('.test-drive-btn');
+            
+            function switchPage(pageId) {
+                pageSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                document.getElementById(pageId).classList.add('active');
+                
+                navLinks.forEach(navLink => {
+                    navLink.classList.remove('active');
+                    if (navLink.getAttribute('data-page') === pageId) {
+                        navLink.classList.add('active');
+                    }
+                });
+                
+                navMenu.classList.remove('active');
+                window.scrollTo(0, 0);
+            }
+            
+            navToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+            });
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('data-page');
+                    switchPage(pageId);
+                });
+            });
+            
+            scheduleTestDriveBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                switchPage('contact');
+            });
+            
+            aboutContactBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                switchPage('contact');
+            });
+            
+            buyNowButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    switchPage('contact');
+                });
+            });
+            
+            testDriveButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    switchPage('contact');
+                });
+            });
+            
+            const footerNavLinks = document.querySelectorAll('.footer-col .nav-link');
+            footerNavLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('data-page');
+                    switchPage(pageId);
+                });
+            });
+            
+            // UPDATED CONTACT FORM SUBMISSION
+            const contactForm = document.getElementById('contactForm');
+            const contactSuccess = document.getElementById('contactSuccess');
+            
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Show success message
+                    contactSuccess.style.display = 'block';
+                    
+                    // Scroll to show the success message
+                    contactSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Reset form after 3 seconds
+                    setTimeout(function() {
+                        contactForm.reset();
+                        contactSuccess.style.display = 'none';
+                    }, 5000);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
